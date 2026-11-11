@@ -15,13 +15,13 @@ EthernetUDP udp;
 
 uint32_t lastSent = 0;
 
-const char* msg = "Hello";
+uint8_t packet[74] = {0};
 
 void setup() {
 
-  Serial.begin(6000000);
+  Serial.begin(6000000); //baud rate of 6 MHz
   while(!Serial && millis() < 4000); // wait for serial monitor to begin
-  Ethernet.begin(TEENSY_IP, subnet, BASE_STATION_IP);
+  Ethernet.begin(TEENSY_IP, subnet, BASE_STATION_IP); // set up ethernet
 
   if(!Ethernet.waitForLink(4000)) {
     Serial.println("Ethernet connection failed");
@@ -31,14 +31,10 @@ void setup() {
     Serial.println("Link up");
     Serial.println(Ethernet.localIP());
   }
+
+  
 }
 
 void loop(){
-  if(millis() - lastSent >= 1000){
-    Serial.println("send");
-    if(!udp.send(BASE_STATION_IP, port, msg, strlen(msg))){
-      Serial.println("Message failed");
-    }
-    lastSent += 1000;
-  }
+  
 }
